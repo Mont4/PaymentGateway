@@ -12,7 +12,7 @@ return [
 		'ir_sep' => [
 			'api_key'     => env('payment_gateway__ir_sep__api_key', 'test'),
 			'gateway_url' => env('payment_gateway__ir_sep__gateway_url', 'https://sep.shaparak.ir/Payment.aspx'),
-			'verify_url'  => env('payment_gateway__ir_sep__verify_url', 'https://sep.shaparak.ir/payments/referencepayment.asmx?wsdl'),
+			'verify_url'  => env('payment_gateway__ir_sep__verify_url', 'https://sep.shaparak.ir/payments/referencepayment.asmx?WSDL'),
 			'redirect'    => env('APP_URL') . '/payment/verify',
 			'password'    => env('payment_gateway__ir_sep__verify_url'),
 		],

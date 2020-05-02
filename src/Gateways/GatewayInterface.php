@@ -13,5 +13,5 @@ interface GatewayInterface
 {
     public function request(int $amount, string $mobile = NULL, string $factorNumber = NULL, string $description = NULL);
 
-    public function verify($transactionId);
+    public function verify($token, ?int $amount = NULL);
 }
