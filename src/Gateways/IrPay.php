@@ -62,9 +62,14 @@ class IrPay implements GatewayInterface
                 $gatewayUrl = "{$this->gatewayUrl}/{$response->token}";
 
                 return [
-                    'status'      => true,
-                    'token'       => $response->token,
+                    'success'     => true,
+                    'method'      => 'get',
                     'gateway_url' => $gatewayUrl,
+                    'token'       => $response->token,
+                    'data'        => [
+                        'Amount'      => $amount,
+                        'RedirectURL' => $gatewayUrl,
+                    ],
                 ];
             }
         } catch (\Exception $ex) {
@@ -78,7 +83,7 @@ class IrPay implements GatewayInterface
 
     }
 
-    public function verify($token)
+    public function verify($token, ?int $amount = NULL)
     {
         try {
             $response = $this->curl_post($this->verifyUrl, [
