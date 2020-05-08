@@ -54,7 +54,7 @@ class IrPay implements GatewayInterface
             $response = $this->curl_post($this->requestUrl, $body);
             if (!$response)
                 return [
-                    'status' => false,
+                    'success' => false,
                 ];
 
             $response = json_decode($response);
@@ -78,7 +78,7 @@ class IrPay implements GatewayInterface
 
 
         return [
-            'status' => false,
+            'success' => false,
         ];
 
     }
@@ -90,21 +90,30 @@ class IrPay implements GatewayInterface
                 'api'   => $this->apiKey,
                 'token' => $token,
             ]);
+            \Log::info($response);
             if (!$response)
                 return [
-                    'status' => false,
+                    'success' => false,
                 ];
 
             $response = json_decode($response);
+            if (!$response->status) {
+                return [
+                    'success' => false,
+                    'message' => self::VERIFY_STATUS[$response->errorCode],
+                ];
+
+            }
+
             if ($response->status == 1) {
                 return [
-                    'status'         => true,
+                    'success'        => true,
+                    'message'        => $response->message,
                     'transaction_id' => $response->transId,
                     'factor_number'  => $response->factorNumber,
                     'mobile'         => $response->mobile,
                     'description'    => $response->description,
                     'card_number'    => $response->cardNumber,
-                    'message'        => $response->message,
                 ];
             }
         } catch (\Exception $ex) {
@@ -112,7 +121,8 @@ class IrPay implements GatewayInterface
         }
 
         return [
-            'status' => false,
+            'success' => false,
+            'message' => 'خطایی رخ داده است.',
         ];
 
     }
