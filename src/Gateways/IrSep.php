@@ -41,7 +41,7 @@ class IrSep implements GatewayInterface
 
         try {
             $soapClient = new SoapClient($this->initUrl);
-            $tokem      = $soapClient->RequestToken($this->apiKey, $factorNumber, $amount, $this->redirect);
+            $token      = $soapClient->RequestToken($this->apiKey, $factorNumber, $amount, $this->redirect);
 
             if (!$token) {
                 return [
