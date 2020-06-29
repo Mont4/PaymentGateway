@@ -41,7 +41,7 @@ class IrSep implements GatewayInterface
 
         try {
             $soapClient = new SoapClient($this->initUrl);
-            $token      = $soapClient->RequestToken($this->apiKey, $factorNumber, $amount, $this->redirect);
+            $token      = $soapClient->RequestToken($this->apiKey, $factorNumber, (string)$amount, $this->redirect);
 
             if (!$token) {
                 return [
@@ -57,10 +57,10 @@ class IrSep implements GatewayInterface
                 'token'       => $factorNumber,
                 'data'        => [
                     'Token'       => $token,
-                    //                    'Amount'      => $amount,
-                    //                    'CellNumber'  => $mobile,
-                    //                    'MID'         => $this->apiKey,
-                    //                    'ResNum'      => $factorNumber,
+                    'Amount'      => $amount,
+                    'CellNumber'  => $mobile,
+                    'MID'         => $this->apiKey,
+                    'ResNum'      => $factorNumber,
                     'RedirectURL' => $this->redirect,
                 ],
             ];
