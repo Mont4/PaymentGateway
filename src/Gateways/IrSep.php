@@ -26,6 +26,7 @@ class IrSep implements GatewayInterface
         $this->apiKey     = $config['api_key'];
         $this->password   = $config['password'];
         $this->gatewayUrl = $config['gateway_url'];
+        $this->initUrl    = $config['init_url'];
         $this->verifyUrl  = $config['verify_url'];
         $this->redirect   = $config['redirect'];
     }
@@ -36,20 +37,42 @@ class IrSep implements GatewayInterface
             throw new \Exception('amount is lower than 1000');
 
         if (!$factorNumber)
-            $factorNumber = "sep_" . Str::random(40);
+            $factorNumber = "sep_" . microtime(true) . Str::random(40);
+
+        try {
+            $soapClient = new SoapClient($this->initUrl);
+            $response   = $soapClient->RequestToken($this->apiKey, $factorNumber, $amount);
+
+            \Log::info($response);
+            if ($response < 0) {
+                return [
+                    'success' => false,
+                    'message' => self::VERIFY_STATUS[$response] ?? NULL,
+                ];
+            }
+
+
+
+            return [
+                'success'     => true,
+                'method'      => 'post',
+                'gateway_url' => $this->gatewayUrl,
+                'token'       => $factorNumber,
+                'data'        => [
+                    'Amount'      => $amount,
+                    'CellNumber'  => $mobile,
+                    'MID'         => $this->apiKey,
+                    'ResNum'      => $factorNumber,
+                    'RedirectURL' => $this->redirect,
+                ],
+            ];
+        } catch (\Exception $ex) {
+            \Log::error($ex);
+        }
+
 
         return [
-            'success'     => true,
-            'method'      => 'post',
-            'gateway_url' => $this->gatewayUrl,
-            'token'       => $factorNumber,
-            'data'        => [
-                'Amount'      => $amount,
-                'CellNumber'  => $mobile,
-                'MID'         => $this->apiKey,
-                'ResNum'      => $factorNumber,
-                'RedirectURL' => $this->redirect,
-            ],
+            'success' => false,
         ];
     }
 
@@ -57,7 +80,7 @@ class IrSep implements GatewayInterface
     {
         try {
             $soapClient = new SoapClient($this->verifyUrl);
-            $response   = $soapClient->verifyTransaction($RefNum, $this->apiKey);
+            $response   = $soapClient->VerifyTransaction($RefNum, $this->apiKey);
 
             if ($response < 0) {
                 return [
