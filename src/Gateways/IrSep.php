@@ -41,17 +41,14 @@ class IrSep implements GatewayInterface
 
         try {
             $soapClient = new SoapClient($this->initUrl);
-            $response   = $soapClient->RequestToken($this->apiKey, $factorNumber, $amount);
+            $tokem      = $soapClient->RequestToken($this->apiKey, $factorNumber, $amount, $this->redirect);
 
-            \Log::info($response);
-            if ($response < 0) {
+            if (!$token) {
                 return [
                     'success' => false,
-                    'message' => self::VERIFY_STATUS[$response] ?? NULL,
+                    'message' => NULL,
                 ];
             }
-
-
 
             return [
                 'success'     => true,
@@ -59,10 +56,11 @@ class IrSep implements GatewayInterface
                 'gateway_url' => $this->gatewayUrl,
                 'token'       => $factorNumber,
                 'data'        => [
-                    'Amount'      => $amount,
-                    'CellNumber'  => $mobile,
-                    'MID'         => $this->apiKey,
-                    'ResNum'      => $factorNumber,
+                    'Token'       => $token,
+                    //                    'Amount'      => $amount,
+                    //                    'CellNumber'  => $mobile,
+                    //                    'MID'         => $this->apiKey,
+                    //                    'ResNum'      => $factorNumber,
                     'RedirectURL' => $this->redirect,
                 ],
             ];
