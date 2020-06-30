@@ -37,11 +37,11 @@ class IrSep implements GatewayInterface
             throw new \Exception('amount is lower than 1000');
 
         if (!$factorNumber)
-            $factorNumber = "sep_" . microtime(true) . Str::random(40);
+            $factorNumber = "sep_" . microtime(true) . '_' . Str::random(24);
 
         try {
             $soapClient = new SoapClient($this->initUrl);
-            $token      = $soapClient->RequestToken($this->apiKey, $factorNumber, (string)$amount, $this->redirect);
+            $token      = $soapClient->RequestToken($this->apiKey, $factorNumber, $amount, $this->redirect);
 
             if (!$token) {
                 return [
