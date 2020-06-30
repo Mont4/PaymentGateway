@@ -43,10 +43,10 @@ class IrSep implements GatewayInterface
             $soapClient = new SoapClient($this->initUrl);
             $token      = $soapClient->RequestToken($this->apiKey, $factorNumber, $amount, $this->redirect);
 
-            if ($response < 0) {
+            if ($token < 0) {
                 return [
                     'success' => false,
-                    'message' => self::VERIFY_STATUS[$response] ?? NULL,
+                    'message' => self::VERIFY_STATUS[$token] ?? NULL,
                 ];
             }
 
