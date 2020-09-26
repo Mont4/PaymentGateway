@@ -26,6 +26,7 @@ class IrSep extends PaymentAbstract implements GatewayInterface
         $this->apiKey     = $config['api_key'];
         $this->password   = $config['password'];
         $this->gatewayUrl = $config['gateway_url'];
+        $this->initUrl    = $config['init_url'];
         $this->verifyUrl  = $config['verify_url'];
         $this->redirect   = $config['redirect'];
     }
@@ -33,22 +34,40 @@ class IrSep extends PaymentAbstract implements GatewayInterface
     public function request()
     {
         if (!$this->orderId)
-            $this->orderId = "sep_" . Str::random(40);
+            $this->orderId = "sep_" . microtime(true) . '_' . Str::random(24);
+
+        try {
+            $soapClient = new SoapClient($this->initUrl);
+            $token      = $soapClient->RequestToken($this->apiKey, $this->orderId, $this->amount, $this->redirect);
+
+            if ($token < 0) {
+                return [
+                    'success' => false,
+                    'message' => self::VERIFY_STATUS[$token] ?? NULL,
+                ];
+            }
+
+            return [
+                'success'     => true,
+                'method'      => 'post',
+                'gateway_url' => $this->gatewayUrl,
+                'token'       => $this->orderId,
+                'data'        => [
+                    'Token'       => $token,
+                    'Amount'      => $this->amount,
+                    'CellNumber'  => $this->mobile,
+                    'MID'         => $this->apiKey,
+                    'ResNum'      => $this->orderId,
+                    'RedirectURL' => $this->redirect,
+                ],
+            ];
+        } catch (\Exception $ex) {
+            \Log::error($ex);
+        }
+
 
         return [
-            'success'     => true,
-            'method'      => 'post',
-            'gateway_url' => $this->gatewayUrl,
-            'token'       => $this->orderId,
-            'data'        => [
-                'MID' => $this->apiKey,
-
-                'Amount'     => $this->amount,
-                'CellNumber' => $this->mobile,
-                'ResNum'     => $this->orderId,
-
-                'RedirectURL' => $this->redirect,
-            ],
+                'success' => false,
         ];
     }
 
@@ -56,7 +75,7 @@ class IrSep extends PaymentAbstract implements GatewayInterface
     {
         try {
             $soapClient = new SoapClient($this->verifyUrl);
-            $response   = $soapClient->verifyTransaction($RefNum, $this->apiKey);
+            $response   = $soapClient->VerifyTransaction($RefNum, $this->apiKey);
 
             if ($response < 0) {
                 return [
