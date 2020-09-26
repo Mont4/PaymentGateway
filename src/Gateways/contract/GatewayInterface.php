@@ -11,7 +11,7 @@ namespace Mont4\PaymentGateway\Gateways;
 
 interface GatewayInterface
 {
-    public function request(int $amount, string $mobile = NULL, string $factorNumber = NULL, string $description = NULL);
+    public function request();
 
     public function verify($token, ?int $amount = NULL);
 }

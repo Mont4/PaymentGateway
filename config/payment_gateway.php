@@ -16,5 +16,15 @@ return [
 			'redirect'    => env('APP_URL') . '/payment/verify',
 			'password'    => env('payment_gateway__ir_sep__verify_url'),
 		],
+        'ir_top' => [
+            'gateway' => 'ir_top',
+
+            'api_key'     => env('payment_gateway__ir_pay__api_key', 'test'),
+            'request_url' => env('payment_gateway__ir_pay__request_url', 'https://pay.ir/pg/send'),
+            'gateway_url' => env('payment_gateway__ir_pay__gateway_url', 'https://pay.ir/pg'),
+            'verify_url'  => env('payment_gateway__ir_pay__verify_url', 'https://pay.ir/pg/verify'),
+
+            'redirect'    => env('URL_WEBSITE') . '/billing/verify',
+        ],
 	],
 ];

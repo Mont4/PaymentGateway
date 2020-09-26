@@ -10,7 +10,7 @@ namespace Mont4\PaymentGateway\Gateways;
 
 use Mont4\PaymentGateway\PaymentGateway;
 
-class IrPay implements GatewayInterface
+class IrPay extends PaymentAbstract implements GatewayInterface
 {
     const VERIFY_STATUS = [
         -1 => "ارسال api الزامی می باشد,",
@@ -32,22 +32,21 @@ class IrPay implements GatewayInterface
         $this->requestUrl = $config['request_url'];
         $this->gatewayUrl = $config['gateway_url'];
         $this->verifyUrl  = $config['verify_url'];
-        $this->redirect   = $config['redirect'];
+        $this->redirect   = $config['redirect'] . "?gateway=" . PaymentGateway::IR_PAY;
     }
 
-    public function request(int $amount, string $mobile = NULL, string $factorNumber = NULL, string $description = NULL)
+    public function request()
     {
-        if ($amount < 1000)
-            throw new \Exception('amount is lower than 1000');
-
         try {
             $body = [
-                'api'          => $this->apiKey,
-                'amount'       => $amount,
-                'mobile'       => $mobile,
-                'factorNumber' => $factorNumber,
-                'description'  => $description,
-                'redirect'     => $this->redirect . "?gateway=" . PaymentGateway::IR_PAY,
+                'api' => $this->apiKey,
+
+                'amount'       => $this->amount,
+                'mobile'       => $this->mobile,
+                'factorNumber' => $this->orderId,
+                'description'  => $this->description,
+
+                'redirect' => $this->redirect,
             ];
 
             // request to pay.ir for token
@@ -67,7 +66,7 @@ class IrPay implements GatewayInterface
                     'gateway_url' => $gatewayUrl,
                     'token'       => $response->token,
                     'data'        => [
-                        'Amount'      => $amount,
+                        'Amount'      => $this->amount,
                         'RedirectURL' => $gatewayUrl,
                     ],
                 ];

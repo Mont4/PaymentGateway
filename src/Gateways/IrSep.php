@@ -5,7 +5,7 @@ namespace Mont4\PaymentGateway\Gateways;
 use Illuminate\Support\Str;
 use SoapClient;
 
-class IrSep implements GatewayInterface
+class IrSep extends PaymentAbstract implements GatewayInterface
 {
     const VERIFY_STATUS = [
         -111 => "ساختار صحیح نمی‌باشد.",
@@ -30,24 +30,23 @@ class IrSep implements GatewayInterface
         $this->redirect   = $config['redirect'];
     }
 
-    public function request(int $amount, string $mobile = NULL, string $factorNumber = NULL, string $description = NULL)
+    public function request()
     {
-        if ($amount < 1000)
-            throw new \Exception('amount is lower than 1000');
-
-        if (!$factorNumber)
-            $factorNumber = "sep_" . Str::random(40);
+        if (!$this->orderId)
+            $this->orderId = "sep_" . Str::random(40);
 
         return [
             'success'     => true,
             'method'      => 'post',
             'gateway_url' => $this->gatewayUrl,
-            'token'       => $factorNumber,
+            'token'       => $this->orderId,
             'data'        => [
-                'Amount'      => $amount,
-                'CellNumber'  => $mobile,
-                'MID'         => $this->apiKey,
-                'ResNum'      => $factorNumber,
+                'MID' => $this->apiKey,
+
+                'Amount'     => $this->amount,
+                'CellNumber' => $this->mobile,
+                'ResNum'     => $this->orderId,
+
                 'RedirectURL' => $this->redirect,
             ],
         ];
