@@ -75,6 +75,7 @@ class IrTop extends PaymentAbstract implements GatewayInterface
                         'Amount'   => $this->amount,
                         'Token'    => $response->Data->Token,
                         'Callback' => $this->redirect,
+                        'Pin'      => $this->apiKey,
                     ],
                 ];
             }
