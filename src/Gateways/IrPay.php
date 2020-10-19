@@ -123,6 +123,5 @@ class IrPay extends PaymentAbstract implements GatewayInterface
             'success' => false,
             'message' => 'خطایی رخ داده است.',
         ];
-
     }
 }

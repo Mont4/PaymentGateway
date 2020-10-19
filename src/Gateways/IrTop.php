@@ -75,6 +75,7 @@ class IrTop extends PaymentAbstract implements GatewayInterface
                         'Amount'   => $this->amount,
                         'Token'    => $response->Data->Token,
                         'Callback' => $this->redirect,
+                        'Pin'      => $this->apiKey,
                     ],
                 ];
             }
@@ -91,7 +92,7 @@ class IrTop extends PaymentAbstract implements GatewayInterface
     public function verify($RefNum, ?int $amount = NULL)
     {
         try {
-            $response = $this->curl_post($this->verifyUrl, [
+            $response = $this->curlPost($this->verifyUrl, [
                 'Token' => $RefNum,
             ]);
 
