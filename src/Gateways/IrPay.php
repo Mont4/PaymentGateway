@@ -50,7 +50,7 @@ class IrPay extends PaymentAbstract implements GatewayInterface
             ];
 
             // request to pay.ir for token
-            $response = $this->curl_post($this->requestUrl, $body);
+            $response = $this->curlPost($this->requestUrl, $body);
             if (!$response)
                 return [
                     'success' => false,
@@ -85,7 +85,7 @@ class IrPay extends PaymentAbstract implements GatewayInterface
     public function verify($token, ?int $amount = NULL)
     {
         try {
-            $response = $this->curl_post($this->verifyUrl, [
+            $response = $this->curlPost($this->verifyUrl, [
                 'api'   => $this->apiKey,
                 'token' => $token,
             ]);
@@ -124,22 +124,5 @@ class IrPay extends PaymentAbstract implements GatewayInterface
             'message' => 'خطایی رخ داده است.',
         ];
 
-    }
-
-    private function curl_post($url, $params)
-    {
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($params));
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, [
-            'Content-Type: application/json',
-        ]);
-        $res = curl_exec($ch);
-        curl_close($ch);
-
-        return $res;
     }
 }

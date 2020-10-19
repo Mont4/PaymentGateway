@@ -27,7 +27,6 @@ class IrTop extends PaymentAbstract implements GatewayInterface
 
     private $authorization;
 
-    private $mobile;
 
     public function __construct($config)
     {
@@ -39,7 +38,7 @@ class IrTop extends PaymentAbstract implements GatewayInterface
         $this->authorization = base64_encode("$this->username:$this->password");
 
         $this->requestUrl = 'https://merchantapi.top.ir/api/EShop/GetToken';
-        $this->gatewayUrl = 'seppay://%s/%s/%d';
+        $this->gatewayUrl = 'https://app.top.ir';
         $this->verifyUrl  = 'https://merchantapi.top.ir/api/EShop/Confirm';
 
         $this->redirect = $config['redirect'];
@@ -57,7 +56,9 @@ class IrTop extends PaymentAbstract implements GatewayInterface
             ];
 
             // request to pay.ir for token
-            $response = $this->curl_post($this->requestUrl, $body);
+            $response = $this->curlPost($this->requestUrl, $body, [
+                "Authorization : Basic $this->authorization",
+            ]);
             if (!$response)
                 return [
                     'success' => false,
@@ -65,12 +66,10 @@ class IrTop extends PaymentAbstract implements GatewayInterface
 
             $response = json_decode($response);
             if ($response->Status == 0) {
-                $gatewayUrl = "{$this->gatewayUrl}/{$response->token}";
-
                 return [
                     'success'     => true,
                     'method'      => 'post',
-                    'gateway_url' => $gatewayUrl,
+                    'gateway_url' => $this->gatewayUrl,
                     'token'       => $response->Data->Token,
                     'data'        => [
                         'Amount'   => $this->amount,

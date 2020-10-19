@@ -21,8 +21,6 @@ class IrSeppay extends PaymentAbstract implements GatewayInterface
     private $redirect;
     private $password;
 
-    private $mobile;
-
     public function __construct($config)
     {
         $this->apiKey     = $config['api_key'];
@@ -57,7 +55,7 @@ class IrSeppay extends PaymentAbstract implements GatewayInterface
     public function verify($RefNum, ?int $amount = NULL)
     {
         try {
-            $response = $this->curl_post($this->verifyUrl, [
+            $response = $this->curlPost($this->verifyUrl, [
                 'mobile_no' => $this->mobile,
                 'ref_no'    => $RefNum,
             ]);
