@@ -12,6 +12,8 @@ abstract class PaymentAbstract
         'Content-Type: application/json',
     ];
 
+    protected $data = [];
+
     protected $amount      = NULL;
     protected $mobile      = NULL;
     protected $orderId     = NULL;
@@ -51,11 +53,19 @@ abstract class PaymentAbstract
         return $this;
     }
 
-    public function setRequest(Request $request)
+    public function getResponse() :array
     {
-        $this->request = $request;
+        return $this->data;
+    }
 
-        return $this;
+    public function getResponseBy($key) :?string
+    {
+        return $this->data[$key] ?? NULL;
+    }
+
+    public function getToken() :?string
+    {
+        return $this->getResponseBy('token');
     }
 
 

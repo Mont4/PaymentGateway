@@ -8,10 +8,13 @@
 
 namespace Mont4\PaymentGateway\Gateways;
 
+use Illuminate\Http\Request;
 
 interface GatewayInterface
 {
     public function request();
 
-    public function verify($token, ?int $amount = NULL);
+    public function verify();
+
+    public function setRequest(Request $request);
 }

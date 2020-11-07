@@ -2,6 +2,7 @@
 
 namespace Mont4\PaymentGateway\Gateways;
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use SoapClient;
 
@@ -67,12 +68,14 @@ class IrSep extends PaymentAbstract implements GatewayInterface
 
 
         return [
-                'success' => false,
+            'success' => false,
         ];
     }
 
-    public function verify($RefNum, ?int $amount = NULL)
+    public function verify()
     {
+        $RefNum = $this->getResponseBy('refrence_number');
+
         try {
             $soapClient = new SoapClient($this->verifyUrl);
             $response   = $soapClient->VerifyTransaction($RefNum, $this->apiKey);
@@ -84,7 +87,7 @@ class IrSep extends PaymentAbstract implements GatewayInterface
                 ];
             }
 
-            if ($response != $amount) {
+            if ($response != $this->amount) {
                 // Reverse Money
                 $this->reverse($RefNum, $response);
 
@@ -129,5 +132,36 @@ class IrSep extends PaymentAbstract implements GatewayInterface
         return [
             'success' => false,
         ];
+    }
+
+    public function setRequest(Request $request)
+    {
+        $requestData = $request->all();
+
+        $status = false;
+        if (isset($requestData['State'])) {
+            $status = $requestData['State'] == 'OK';
+        }
+
+        $this->data = [
+            'status' => $status,
+
+            'mid'   => $requestData['MID'] ?? NULL,
+            'token' => $requestData['ResNum'] ?? NULL,
+
+
+            'reserve_number'           => $requestData['ResNum'] ?? NULL,
+            'reference_number'          => $requestData['RefNum'] ?? NULL,
+            'trace_number'             => $requestData['TraceNo'] ?? NULL,
+            'customer_refrence_number' => NULL,
+            'transaction_amount'       => $requestData['Amount'] ?? NULL,
+
+            'card_hashed' => $requestData['HashedCardNumber'] ?? NULL,
+            'card_number' => $requestData['SecurePan'] ?? NULL,
+
+            'mobile_number' => NULL,
+        ];
+
+        return $this;
     }
 }

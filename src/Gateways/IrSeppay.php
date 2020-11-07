@@ -52,7 +52,7 @@ class IrSeppay extends PaymentAbstract implements GatewayInterface
         ];
     }
 
-    public function verify($RefNum, ?int $amount = NULL)
+    public function verify()
     {
         try {
             $response = $this->curlPost($this->verifyUrl, [

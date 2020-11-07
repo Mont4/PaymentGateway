@@ -2,42 +2,53 @@
 
 namespace Mont4\PaymentGateway;
 
+use Illuminate\Http\Request;
 use Mont4\PaymentGateway\Gateways\IrPay;
 use Mont4\PaymentGateway\Gateways\IrSep;
 use Mont4\PaymentGateway\Gateways\IrSeppay;
 use Mont4\PaymentGateway\Gateways\IrTop;
+use Mont4\PaymentGateway\Gateways\IrFanavacard;
 
 /**
  * Class PaymentGateway
  *
  * @package Mont4\PaymentGateway
  *
- * @method setAmount(int $amount)
- * @method setMobile(string $mobile)
- * @method setOrderId(int $orderId)
- * @method request(int $amount, string $mobile = NULL, string $factorNumber = NULL, string $description = NULL)
- * @method verify($token, $amount = NULL)
+ * @method self setAmount(int $amount)
+ * @method self setMobile(string $mobile)
+ * @method self setOrderId(int $orderId)
+ * @method self setRequest(Request $request)
+ *
+ * @method string getToken($key)
+ * @method string getResponseBy($key)
+ * @method array getResponse()
+ *
+ * @method request()
+ * @method verify()
  * @method reverse($token)
  */
 class PaymentGateway
 {
-    const IR_PAY     = 'ir_pay';
-    const IR_SEP     = 'ir_sep';
-    const IR_SEP_PAY = 'ir_sep_pay';
-    const IR_TOP     = 'ir_top';
+    const IR_PAY        = 'ir_pay';
+    const IR_SEP        = 'ir_sep';
+    const IR_SEP_PAY    = 'ir_sep_pay';
+    const IR_TOP        = 'ir_top';
+    const IR_FANAVACARD = 'ir_fanavacard';
 
     const GATEWAYS = [
         self::IR_PAY,
         self::IR_SEP,
         self::IR_SEP_PAY,
         self::IR_TOP,
+        self::IR_FANAVACARD,
     ];
 
     const GATEWAY_CLASSES = [
-        self::IR_PAY     => IrPay::class,
-        self::IR_SEP     => IrSep::class,
-        self::IR_SEP_PAY => IrSeppay::class,
-        self::IR_TOP     => IrTop::class,
+        self::IR_PAY        => IrPay::class,
+        self::IR_SEP        => IrSep::class,
+        self::IR_SEP_PAY    => IrSeppay::class,
+        self::IR_TOP        => IrTop::class,
+        self::IR_FANAVACARD => IrFanavacard::class,
     ];
 
     private $gateway = NULL;

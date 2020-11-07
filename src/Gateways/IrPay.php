@@ -8,6 +8,7 @@
 
 namespace Mont4\PaymentGateway\Gateways;
 
+use Illuminate\Http\Request;
 use Mont4\PaymentGateway\PaymentGateway;
 
 class IrPay extends PaymentAbstract implements GatewayInterface
@@ -82,19 +83,19 @@ class IrPay extends PaymentAbstract implements GatewayInterface
 
     }
 
-    public function verify($token, ?int $amount = NULL)
+    public function verify()
     {
         try {
             $response = $this->curlPost($this->verifyUrl, [
                 'api'   => $this->apiKey,
-                'token' => $token,
+                'token' => $this->getToken(),
             ]);
-            \Log::info($response);
             if (!$response)
                 return [
                     'success' => false,
                 ];
 
+            \Log::info($response);
             $response = json_decode($response);
             if (!$response->status) {
                 return [
@@ -105,6 +106,12 @@ class IrPay extends PaymentAbstract implements GatewayInterface
             }
 
             if ($response->status == 1) {
+                $this->data['refrence_number']    = $response->transId;
+                $this->data['trace_number']       = $response->traceNumber;
+                $this->data['transaction_amount'] = $response->amount;
+                $this->data['mobile']             = $response->mobile;
+                $this->data['card_number']        = $response->cardNumber;
+
                 return [
                     'success'        => true,
                     'message'        => $response->message,
@@ -123,5 +130,36 @@ class IrPay extends PaymentAbstract implements GatewayInterface
             'success' => false,
             'message' => 'خطایی رخ داده است.',
         ];
+    }
+
+    public function setRequest(Request $request)
+    {
+        $requestData = $request->all();
+
+        $status = false;
+        if (isset($requestData['status'])) {
+            $status = $requestData['status'] == 1;
+        }
+
+        $this->data = [
+            'status' => $status,
+
+            'mid'   => $requestData['MID'] ?? NULL,
+            'token' => $requestData['token'] ?? NULL,
+
+
+            'reserve_number'           => $requestData['ResNum'] ?? NULL,
+            'reference_number'         => $requestData['RefNum'] ?? NULL,
+            'trace_number'             => $requestData['TraceNo'] ?? NULL,
+            'customer_refrence_number' => $requestData['CustomerRefNum'] ?? NULL,
+            'transaction_amount'       => $requestData['transaction_amount'] ?? NULL,
+
+            'card_hashed' => $requestData['CardHashPan'] ?? NULL,
+            'card_number' => $requestData['card_number'] ?? NULL,
+
+            'mobile_number' => $requestData['mobileNo'] ?? NULL,
+        ];
+
+        return $this;
     }
 }
