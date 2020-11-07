@@ -6,7 +6,7 @@
  * Time: 8:42 PM
  */
 
-namespace Mont4\PaymentGateway\Gateways;
+namespace Mont4\PaymentGateway\Gateways\Contract;
 
 use Illuminate\Http\Request;
 

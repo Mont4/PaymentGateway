@@ -11,6 +11,7 @@ namespace Mont4\PaymentGateway\Gateways;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Mont4\PaymentGateway\PaymentGateway;
+use Mont4\PaymentGateway\Gateways\Contract\GatewayInterface;
 
 class IrFanavacard extends PaymentAbstract implements GatewayInterface
 {

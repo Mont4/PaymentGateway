@@ -3,6 +3,7 @@
 namespace Mont4\PaymentGateway\Gateways;
 
 use Illuminate\Support\Str;
+use Mont4\PaymentGateway\Gateways\Contract\GatewayInterface;
 
 class IrTop extends PaymentAbstract implements GatewayInterface
 {

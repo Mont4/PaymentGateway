@@ -10,6 +10,7 @@ namespace Mont4\PaymentGateway\Gateways;
 
 use Illuminate\Http\Request;
 use Mont4\PaymentGateway\PaymentGateway;
+use Mont4\PaymentGateway\Gateways\Contract\GatewayInterface;
 
 class IrPay extends PaymentAbstract implements GatewayInterface
 {

@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Mont4\PaymentGateway\Gateways;
+namespace Mont4\PaymentGateway\Gateways\Contract;
 
 
 interface ReverseInterface

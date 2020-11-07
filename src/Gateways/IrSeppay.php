@@ -4,6 +4,7 @@ namespace Mont4\PaymentGateway\Gateways;
 
 use Illuminate\Support\Str;
 use SoapClient;
+use Mont4\PaymentGateway\Gateways\Contract\GatewayInterface;
 
 class IrSeppay extends PaymentAbstract implements GatewayInterface
 {
