@@ -75,7 +75,7 @@ class IrSep extends PaymentAbstract implements GatewayInterface
 
     public function verify()
     {
-        $RefNum = $this->getResponseBy('refrence_number');
+        $RefNum = $this->getResponseBy('reference_number');
 
         try {
             $soapClient = new SoapClient($this->verifyUrl);
@@ -151,11 +151,11 @@ class IrSep extends PaymentAbstract implements GatewayInterface
             'token' => $requestData['ResNum'] ?? NULL,
 
 
-            'reserve_number'           => $requestData['ResNum'] ?? NULL,
+            'reserve_number'            => $requestData['ResNum'] ?? NULL,
             'reference_number'          => $requestData['RefNum'] ?? NULL,
-            'trace_number'             => $requestData['TraceNo'] ?? NULL,
-            'customer_refrence_number' => NULL,
-            'transaction_amount'       => $requestData['Amount'] ?? NULL,
+            'trace_number'              => $requestData['TraceNo'] ?? NULL,
+            'customer_reference_number' => NULL,
+            'transaction_amount'        => $requestData['Amount'] ?? NULL,
 
             'card_hashed' => $requestData['HashedCardNumber'] ?? NULL,
             'card_number' => $requestData['SecurePan'] ?? NULL,

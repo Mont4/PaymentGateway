@@ -107,7 +107,7 @@ class IrPay extends PaymentAbstract implements GatewayInterface
             }
 
             if ($response->status == 1) {
-                $this->data['refrence_number']    = $response->transId;
+                $this->data['reference_number']   = $response->transId;
                 $this->data['trace_number']       = $response->traceNumber;
                 $this->data['transaction_amount'] = $response->amount;
                 $this->data['mobile']             = $response->mobile;
@@ -149,11 +149,11 @@ class IrPay extends PaymentAbstract implements GatewayInterface
             'token' => $requestData['token'] ?? NULL,
 
 
-            'reserve_number'           => $requestData['ResNum'] ?? NULL,
-            'reference_number'         => $requestData['RefNum'] ?? NULL,
-            'trace_number'             => $requestData['TraceNo'] ?? NULL,
-            'customer_refrence_number' => $requestData['CustomerRefNum'] ?? NULL,
-            'transaction_amount'       => $requestData['transaction_amount'] ?? NULL,
+            'reserve_number'            => $requestData['ResNum'] ?? NULL,
+            'reference_number'          => $requestData['RefNum'] ?? NULL,
+            'trace_number'              => $requestData['TraceNo'] ?? NULL,
+            'customer_reference_number' => $requestData['CustomerRefNum'] ?? NULL,
+            'transaction_amount'        => $requestData['transaction_amount'] ?? NULL,
 
             'card_hashed' => $requestData['CardHashPan'] ?? NULL,
             'card_number' => $requestData['card_number'] ?? NULL,

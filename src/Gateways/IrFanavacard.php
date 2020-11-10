@@ -80,7 +80,10 @@ class IrFanavacard extends PaymentAbstract implements GatewayInterface
                     'method'      => 'get',
                     'gateway_url' => $gatewayUrl,
                     'token'       => $response->Token,
-                    'data'        => [],
+                    'data'        => [
+                        'token' => $response->Token,
+                        'lang'  => 'fa',
+                    ],
                 ];
             }
         } catch (\Exception $ex) {

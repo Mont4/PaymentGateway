@@ -9,24 +9,16 @@ use Mont4\PaymentGateway\Gateways\Contract\GatewayInterface;
 
 class IrPec extends PaymentAbstract implements GatewayInterface
 {
-    const VERIFY_STATUS = [
-        -111 => "ساختار صحیح نمی‌باشد.",
-        -18  => "IP شما برای این ترمینال ثبت نشده است.",
-        -6   => "زمان تایید درخواست به پایان رسیده است.",
-        -1   => "کدفروشنده یا RefNum صحیح نمی‌باشد.",
-        -20  => "مبلغ دریافتی از بانک با سند تراکنش تطابق ندارد. پول به حساب شما برمی‌گردد.",
-    ];
+    const VERIFY_STATUS = [];
 
     private $pin;
     private $gatewayUrl;
     private $verifyUrl;
     private $redirect;
-    private $password;
 
     public function __construct($config)
     {
         $this->pin        = $config['pin'];
-        $this->password   = $config['password'];
         $this->gatewayUrl = "https://pec.shaparak.ir/NewIPG/?Token=%s";
         $this->initUrl    = "https://pec.shaparak.ir/NewIPGServices/MultiplexedSale/OnlineMultiplexedSalePaymentService.asmx?WSDL";
         $this->verifyUrl  = "https://pec.shaparak.ir/NewIPGServices/Confirm/ConfirmService.asmx?WSDL";
@@ -47,7 +39,7 @@ class IrPec extends PaymentAbstract implements GatewayInterface
         ];
         try {
             $soapClient = new SoapClient($this->initUrl);
-            $response   = $client->MultiplexedSalePaymentRequest([
+            $response   = $soapClient->MultiplexedSalePaymentRequest([
                 "requestData" => $params,
             ]);
 
@@ -66,7 +58,9 @@ class IrPec extends PaymentAbstract implements GatewayInterface
                 'method'      => 'get',
                 'gateway_url' => $gatewayUrl,
                 'token'       => $token,
-                'data'        => [],
+                'data'        => [
+                    'Token' => $token
+                ],
             ];
         } catch (\Exception $ex) {
             \Log::error($ex);
@@ -90,10 +84,10 @@ class IrPec extends PaymentAbstract implements GatewayInterface
                 "requestData" => $params,
             ]);
 
-            if ($result->ConfirmPaymentResult->Status != '0') {
+            if ($response->ConfirmPaymentResult->Status != '0') {
                 return [
-                    'succsss' => false,
-                    'message' => $result->ConfirmPaymentResult->Message,
+                    'success' => false,
+                    'message' => $response->ConfirmPaymentResult->Message,
                 ];
             }
 
@@ -150,11 +144,11 @@ class IrPec extends PaymentAbstract implements GatewayInterface
             'token' => $requestData['Token'] ?? NULL,
 
 
-            'reserve_number'           => NULL,
-            'reference_number'         => $requestData['RRN'] ?? NULL,
-            'trace_number'             => NULL,
-            'customer_refrence_number' => NULL,
-            'transaction_amount'       => $requestData['Amount'] ?? NULL,
+            'reserve_number'            => NULL,
+            'reference_number'          => $requestData['RRN'] ?? NULL,
+            'trace_number'              => NULL,
+            'customer_reference_number' => NULL,
+            'transaction_amount'        => $requestData['Amount'] ?? NULL,
 
             'card_hashed' => NULL,
             'card_number' => NULL,
