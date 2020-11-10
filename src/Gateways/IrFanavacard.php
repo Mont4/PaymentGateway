@@ -152,20 +152,20 @@ class IrFanavacard extends PaymentAbstract implements GatewayInterface
         $this->data = [
             'status' => $status,
 
-            'mid'   => $requestData['mid'] ?? NULL,
+            'mid'   => $requestData['MID'] ?? NULL,
             'token' => $requestData['token'] ?? NULL,
 
 
-            'reserve_number'            => $requestData['reserve_number'] ?? NULL,
-            'reference_number'          => $requestData['reference_number'] ?? NULL,
-            'trace_number'              => $requestData['trace_number'] ?? NULL,
-            'customer_reference_number' => $requestData['customer_reference_number'] ?? NULL,
-            'transaction_amount'        => $requestData['transaction_amount'] ?? NULL,
+            'reserve_number'            => $requestData['ResNum'] ?? NULL,
+            'reference_number'          => $requestData['RefNum'] ?? NULL,
+            'trace_number'              => $requestData['TraceNo'] ?? NULL,
+            'customer_reference_number' => $requestData['CustomerRefNum'] ?? NULL,
+            'transaction_amount'        => $requestData['transactionAmount'] ?? NULL,
 
-            'card_hashed' => $requestData['card_hashed'] ?? NULL,
-            'card_number' => $requestData['card_number'] ?? NULL,
+            'card_hashed' => $requestData['CardHashPan'] ?? NULL,
+            'card_number' => $requestData['CardMaskPan'] ?? NULL,
 
-            'mobile_number' => $requestData['mobile_number'] ?? NULL,
+            'mobile_number' => $requestData['mobileNo'] ?? NULL,
         ];
 
         return $this;
