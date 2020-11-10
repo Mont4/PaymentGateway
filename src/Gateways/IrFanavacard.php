@@ -107,7 +107,7 @@ class IrFanavacard extends PaymentAbstract implements GatewayInterface
                 ],
 
                 'Token'  => $this->getToken(),
-                'RefNum' => $this->getResponseBy('RefNum'),
+                'RefNum' => $this->getResponseBy('reference_number'),
             ];
 
             $response = $this->curlPost($this->verifyUrl, $body);
