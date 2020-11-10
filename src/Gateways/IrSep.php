@@ -93,8 +93,9 @@ class IrSep extends PaymentAbstract implements GatewayInterface
                 $this->reverse($RefNum, $response);
 
                 return [
-                    'success' => false,
-                    'message' => self::VERIFY_STATUS[-20] ?? NULL,
+                    'success'  => false,
+                    'response' => $response,
+                    'message'  => self::VERIFY_STATUS[-20] ?? NULL,
                 ];
             }
 
