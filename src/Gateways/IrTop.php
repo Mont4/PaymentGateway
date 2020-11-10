@@ -2,6 +2,7 @@
 
 namespace Mont4\PaymentGateway\Gateways;
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Mont4\PaymentGateway\Gateways\Contract\GatewayInterface;
 
@@ -92,6 +93,8 @@ class IrTop extends PaymentAbstract implements GatewayInterface
 
     public function verify()
     {
+        $RefNum = $this->getResponseBy('reference_number');
+
         try {
             $response = $this->curlPost($this->verifyUrl, [
                 'Token' => $RefNum,
@@ -127,5 +130,37 @@ class IrTop extends PaymentAbstract implements GatewayInterface
             'success' => false,
             'message' => 'خطایی رخ داده است.',
         ];
+    }
+
+    public function setRequest(Request $request)
+    {
+        $requestData = $request->all();
+        \Log::info($requestData);
+
+        $status = false;
+        if (isset($requestData['State'])) {
+            $status = $requestData['State'] == 'OK';
+        }
+
+        $this->data = [
+            'status' => $status,
+
+            'mid'   => $requestData['MID'] ?? NULL,
+            'token' => $requestData['ResNum'] ?? NULL,
+
+
+            'reserve_number'            => $requestData['ResNum'] ?? NULL,
+            'reference_number'          => $requestData['RefNum'] ?? NULL,
+            'trace_number'              => $requestData['TraceNo'] ?? NULL,
+            'customer_reference_number' => NULL,
+            'transaction_amount'        => $requestData['Amount'] ?? NULL,
+
+            'card_hashed' => $requestData['HashedCardNumber'] ?? NULL,
+            'card_number' => $requestData['SecurePan'] ?? NULL,
+
+            'mobile_number' => NULL,
+        ];
+
+        return $this;
     }
 }
