@@ -93,7 +93,7 @@ class IrTop extends PaymentAbstract implements GatewayInterface
 
     public function verify()
     {
-        $body   = [
+        $body = [
             'Token' => $this->getToken(),
         ];
 
@@ -110,20 +110,21 @@ class IrTop extends PaymentAbstract implements GatewayInterface
                 ];
 
             $response = json_decode($response);
-            if (!$response->ResponseCode) {
+            if ($response->Status != 0) {
                 return [
                     'success' => false,
-                    'message' => self::VERIFY_STATUS[$response->errorCode],
+                    'status'  => $response->Status,
+                    'message' => $response->Message,
                 ];
 
             }
 
-            if ($response->ResponseCode == 1) {
-                return [
-                    'success'        => true,
-                    'transaction_id' => $response->InvoiceNumber,
-                ];
-            }
+            $this->data['trace_number'] = $response->Data->InvoiceNumber;
+
+            return [
+                'success'      => true,
+                'trace_number' => $response->Data->InvoiceNumber,
+            ];
         } catch (\Exception $ex) {
             \Log::error($ex);
         }
