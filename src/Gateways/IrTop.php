@@ -138,25 +138,25 @@ class IrTop extends PaymentAbstract implements GatewayInterface
         \Log::info($requestData);
 
         $status = false;
-        if (isset($requestData['State'])) {
-            $status = $requestData['State'] == 'OK';
+        if (isset($requestData['TransactionStatus'])) {
+            $status = $requestData['TransactionStatus'] == '0';
         }
 
         $this->data = [
             'status' => $status,
 
             'mid'   => $requestData['MID'] ?? NULL,
-            'token' => $requestData['ResNum'] ?? NULL,
+            'token' => $requestData['Token'] ?? NULL,
 
 
-            'reserve_number'            => $requestData['ResNum'] ?? NULL,
-            'reference_number'          => $requestData['RefNum'] ?? NULL,
-            'trace_number'              => $requestData['TraceNo'] ?? NULL,
+            'reserve_number'            => NULL,
+            'reference_number'          => $requestData['ReferenceCode'] ?? NULL,
+            'trace_number'              => NULL,
             'customer_reference_number' => NULL,
-            'transaction_amount'        => $requestData['Amount'] ?? NULL,
+            'transaction_amount'        => NULL,
 
-            'card_hashed' => $requestData['HashedCardNumber'] ?? NULL,
-            'card_number' => $requestData['SecurePan'] ?? NULL,
+            'card_hashed' => NULL,
+            'card_number' => NULL,
 
             'mobile_number' => NULL,
         ];
