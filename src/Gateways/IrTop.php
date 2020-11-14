@@ -93,11 +93,13 @@ class IrTop extends PaymentAbstract implements GatewayInterface
 
     public function verify()
     {
-        $RefNum = $this->getResponseBy('reference_number');
+        $body   = [
+            'Token' => $this->getToken(),
+        ];
 
         try {
-            $response = $this->curlPost($this->verifyUrl, [
-                'Token' => $RefNum,
+            $response = $this->curlPost($this->verifyUrl, $body, [
+                "Authorization : Basic $this->authorization",
             ]);
 
             \Log::info($response);
