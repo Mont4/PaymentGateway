@@ -39,7 +39,7 @@ class IrPec extends PaymentAbstract implements GatewayInterface
         ];
         try {
             $soapClient = new SoapClient($this->initUrl);
-            $response   = $soapClient->MultiplexedSalePaymentRequest([
+            $response   = $soapClient->SalePaymentRequest([
                 "requestData" => $params,
             ]);
 
