@@ -43,14 +43,15 @@ class IrPec extends PaymentAbstract implements GatewayInterface
                 "requestData" => $params,
             ]);
 
-            if ($response->MultiplexedSalePaymentRequestResult->Status != '0') {
+            if ($response->SalePaymentRequestResult->Status != '0') {
                 return [
                     'success' => false,
-                    'message' => $response->MultiplexedSalePaymentRequestResult->Message,
+                    'message' => $response->SalePaymentRequestResult->Message,
+                    'status'  => $response->SalePaymentRequestResult->Status,
                 ];
             }
 
-            $token = $response->MultiplexedSalePaymentRequestResult->Token;
+            $token = $response->SalePaymentRequestResult->Token;
 
             $gatewayUrl = sprintf($this->gatewayUrl, $token);
             return [
@@ -59,7 +60,7 @@ class IrPec extends PaymentAbstract implements GatewayInterface
                 'gateway_url' => $gatewayUrl,
                 'token'       => $token,
                 'data'        => [
-                    'Token' => $token
+                    'Token' => $token,
                 ],
             ];
         } catch (\Exception $ex) {
