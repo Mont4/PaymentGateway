@@ -104,31 +104,6 @@ class IrPec extends PaymentAbstract implements GatewayInterface
         ];
     }
 
-    public function reverse($RefNum, $amount)
-    {
-        try {
-            $soapClient = new SoapClient($this->verifyUrl);
-            $response   = $soapClient->reverseTransaction($RefNum, $this->apiKey, $this->password, $amount);
-
-            if ($response < 0) {
-                return [
-                    'success' => false,
-                    'message' => self::VERIFY_STATUS[$response] ?? NULL,
-                ];
-            }
-
-            return [
-                'success' => true,
-            ];
-        } catch (\Exception $ex) {
-            \Log::error($ex);
-        }
-
-        return [
-            'success' => false,
-        ];
-    }
-
     public function setRequest(Request $request)
     {
         $requestData = $request->all();
@@ -141,18 +116,19 @@ class IrPec extends PaymentAbstract implements GatewayInterface
         $this->data = [
             'status' => $status,
 
-            'mid'   => $requestData['TerminalNo'] ?? NULL,
-            'token' => $requestData['Token'] ?? NULL,
+            'mid'      => $requestData['TerminalNo'] ?? NULL,
+            'token'    => $requestData['Token'] ?? NULL,
+            'order_id' => $requestData['OrderId'] ?? NULL,
 
 
             'reserve_number'            => NULL,
             'reference_number'          => $requestData['RRN'] ?? NULL,
-            'trace_number'              => NULL,
+            'trace_number'              => $requestData['STraceNo'] ?? NULL,
             'customer_reference_number' => NULL,
             'transaction_amount'        => $requestData['Amount'] ?? NULL,
 
             'card_hashed' => NULL,
-            'card_number' => NULL,
+            'card_number' => $requestData['HashCardNumber'] ?? NULL,
 
             'mobile_number' => NULL,
         ];
