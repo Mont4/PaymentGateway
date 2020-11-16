@@ -20,7 +20,7 @@ class IrPec extends PaymentAbstract implements GatewayInterface
     {
         $this->pin        = $config['pin'];
         $this->gatewayUrl = "https://pec.shaparak.ir/NewIPG/?Token=%s";
-        $this->initUrl    = "https://pec.shaparak.ir/NewIPGServices/MultiplexedSale/OnlineMultiplexedSalePaymentService.asmx?WSDL";
+        $this->initUrl    = "https://pec.shaparak.ir/NewIPGServices/Sale/SaleService.asmx?WSDL";
         $this->verifyUrl  = "https://pec.shaparak.ir/NewIPGServices/Confirm/ConfirmService.asmx?WSDL";
         $this->redirect   = $config['redirect'];
     }
