@@ -3,6 +3,7 @@
 namespace Mont4\PaymentGateway;
 
 use Illuminate\Http\Request;
+use Mont4\PaymentGateway\Gateways\ComZarinpal;
 use Mont4\PaymentGateway\Gateways\IrFanavacard;
 use Mont4\PaymentGateway\Gateways\IrPay;
 use Mont4\PaymentGateway\Gateways\IrPec;
@@ -55,6 +56,7 @@ class PaymentGateway
         self::IR_SEP_PAY    => IrSeppay::class,
         self::IR_TOP        => IrTop::class,
         self::IR_FANAVACARD => IrFanavacard::class,
+        self::COM_ZARINPAL  => ComZarinpal::class,
     ];
 
     private $gateway = NULL;

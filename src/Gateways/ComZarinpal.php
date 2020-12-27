@@ -37,10 +37,11 @@ class ComZarinpal extends PaymentAbstract implements GatewayInterface
             $body = [
                 'MerchantID' => $this->merchantId,
 
-                'Amount' => $this->amount,
-                'Mobile' => $this->mobile,
+                'Amount'      => $this->amount,
+                'Mobile'      => $this->mobile,
+                'description' => $this->description,
 
-                'Callback' => $this->redirect,
+                'callback_url' => $this->redirect,
             ];
 
             // request to pay.ir for token
@@ -51,14 +52,14 @@ class ComZarinpal extends PaymentAbstract implements GatewayInterface
                 ];
 
             $response = json_decode($response);
-            if ($response->Status == 100) {
-                $gatewayUrl = sprintf($this->gatewayUrl, $response->Authority);
+            if ($response->data->code == 100) {
+                $gatewayUrl = sprintf($this->gatewayUrl, $response->data->authority);
 
                 return [
                     'success'     => true,
                     'method'      => 'get',
                     'gateway_url' => $gatewayUrl,
-                    'token'       => $response->Authority,
+                    'token'       => $response->data->authority,
                     'data'        => [],
                 ];
             }
@@ -86,7 +87,6 @@ class ComZarinpal extends PaymentAbstract implements GatewayInterface
                     'success' => false,
                 ];
 
-            \Log::info($response);
             $response = json_decode($response);
             if (!$response->status) {
                 return [
@@ -97,10 +97,10 @@ class ComZarinpal extends PaymentAbstract implements GatewayInterface
             }
 
             if ($response->Status == 100) {
-                $this->data['reference_number']   = $response->RefID;
+                $this->data['reference_number'] = $response->RefID;
 
                 return [
-                    'success'        => true,
+                    'success' => true,
                 ];
             }
         } catch (\Exception $ex) {
