@@ -3,12 +3,12 @@
 namespace Mont4\PaymentGateway;
 
 use Illuminate\Http\Request;
+use Mont4\PaymentGateway\Gateways\IrFanavacard;
 use Mont4\PaymentGateway\Gateways\IrPay;
 use Mont4\PaymentGateway\Gateways\IrPec;
 use Mont4\PaymentGateway\Gateways\IrSep;
 use Mont4\PaymentGateway\Gateways\IrSeppay;
 use Mont4\PaymentGateway\Gateways\IrTop;
-use Mont4\PaymentGateway\Gateways\IrFanavacard;
 
 /**
  * Class PaymentGateway
@@ -36,6 +36,7 @@ class PaymentGateway
     const IR_SEP_PAY    = 'ir_sep_pay';
     const IR_TOP        = 'ir_top';
     const IR_FANAVACARD = 'ir_fanavacard';
+    const COM_ZARINPAL  = 'com_zarinpal';
 
     const GATEWAYS = [
         self::IR_PAY,
@@ -44,6 +45,7 @@ class PaymentGateway
         self::IR_SEP_PAY,
         self::IR_TOP,
         self::IR_FANAVACARD,
+        self::COM_ZARINPAL,
     ];
 
     const GATEWAY_CLASSES = [
