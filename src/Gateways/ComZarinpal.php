@@ -35,10 +35,10 @@ class ComZarinpal extends PaymentAbstract implements GatewayInterface
     {
         try {
             $body = [
-                'MerchantID' => $this->merchantId,
+                'merchant_id' => $this->merchantId,
 
-                'Amount'      => $this->amount,
-                'Mobile'      => $this->mobile,
+                'amount'      => $this->amount,
+                'mobile'      => $this->mobile,
                 'description' => $this->description,
 
                 'callback_url' => $this->redirect,
@@ -78,9 +78,9 @@ class ComZarinpal extends PaymentAbstract implements GatewayInterface
     {
         try {
             $response = $this->curlPost($this->verifyUrl, [
-                'MerchantID' => $this->merchantId,
-                'Amount'     => $this->amount,
-                'Authority'  => $this->getToken(),
+                'merchant_id' => $this->merchantId,
+                'amount'      => $this->amount,
+                'authority'   => $this->getToken(),
             ]);
             if (!$response)
                 return [
