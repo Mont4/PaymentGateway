@@ -90,16 +90,18 @@ class ComZarinpal extends PaymentAbstract implements GatewayInterface
             \Log::info($response);
 
             $response = json_decode($response);
-            if (!$response->Status) {
+            if ($response->data->code != 100) {
                 return [
                     'success' => false,
-                    'message' => self::VERIFY_STATUS[$response->Status],
+                    'message' => self::VERIFY_STATUS[$response->Status] ?? '',
                 ];
 
             }
 
-            if ($response->Status == 100) {
-                $this->data['reference_number'] = $response->RefID;
+            if ($response->data->code == 100) {
+                $this->data['card_hashed'] = $response->data->card_hash;
+                $this->data['card_number'] = $response->data->card_pan;
+                $this->data['reference_number'] = $response->data->ref_id;
 
                 return [
                     'success' => true,
