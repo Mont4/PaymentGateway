@@ -87,8 +87,10 @@ class ComZarinpal extends PaymentAbstract implements GatewayInterface
                     'success' => false,
                 ];
 
+            \Log::info($response);
+
             $response = json_decode($response);
-            if (!$response->status) {
+            if (!$response->Status) {
                 return [
                     'success' => false,
                     'message' => self::VERIFY_STATUS[$response->Status],
