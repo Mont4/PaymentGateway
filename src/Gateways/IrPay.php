@@ -74,7 +74,7 @@ class IrPay extends PaymentAbstract implements GatewayInterface
                 ];
             }
         } catch (\Exception $ex) {
-            \Log::error($ex);
+            app('log')->error($ex);
         }
 
 
@@ -96,7 +96,7 @@ class IrPay extends PaymentAbstract implements GatewayInterface
                     'success' => false,
                 ];
 
-            \Log::info($response);
+            app('log')->info($response);
             $response = json_decode($response);
             if (!$response->status) {
                 return [
@@ -124,7 +124,7 @@ class IrPay extends PaymentAbstract implements GatewayInterface
                 ];
             }
         } catch (\Exception $ex) {
-            \Log::error($ex);
+            app('log')->error($ex);
         }
 
         return [
