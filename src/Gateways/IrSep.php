@@ -30,7 +30,7 @@ class IrSep extends PaymentAbstract implements GatewayInterface
         $this->gatewayUrl = $config['gateway_url'];
         $this->initUrl    = $config['init_url'];
         $this->verifyUrl  = $config['verify_url'];
-        $this->redirect   = $config['redirect'];
+        $this->redirect   = $config['callback_url'];
     }
 
     public function request()

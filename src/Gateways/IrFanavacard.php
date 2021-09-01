@@ -39,7 +39,7 @@ class IrFanavacard extends PaymentAbstract implements GatewayInterface
         $this->requestUrl = "https://fcp.shaparak.ir/ref-payment/RestServices/mts/generateTokenWithNoSign/";
         $this->gatewayUrl = "https://fcp.shaparak.ir/_ipgw_//payment/?token=%s&lang=fa";
         $this->verifyUrl  = "https://fcp.shaparak.ir/ref-payment/RestServices/mts/verifyMerchantTrans/";
-        $this->redirect   = $config['redirect'] . "?gateway=" . PaymentGateway::IR_FANAVACARD;
+        $this->redirect   = $config['callback_url'];
     }
 
     public function request()

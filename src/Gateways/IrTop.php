@@ -43,7 +43,7 @@ class IrTop extends PaymentAbstract implements GatewayInterface
         $this->gatewayUrl = 'https://app.top.ir';
         $this->verifyUrl  = 'https://merchantapi.top.ir/api/EShop/Confirm';
 
-        $this->redirect = $config['redirect'];
+        $this->redirect = $config['callback_url'];
     }
 
     public function request()

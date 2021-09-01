@@ -4,6 +4,7 @@ namespace Mont4\PaymentGateway;
 
 use Illuminate\Http\Request;
 use Mont4\PaymentGateway\Gateways\ComZarinpal;
+use Mont4\PaymentGateway\Gateways\IrBpm;
 use Mont4\PaymentGateway\Gateways\IrFanavacard;
 use Mont4\PaymentGateway\Gateways\IrPay;
 use Mont4\PaymentGateway\Gateways\IrPec;
@@ -31,16 +32,18 @@ use Mont4\PaymentGateway\Gateways\IrTop;
  */
 class PaymentGateway
 {
-    const IR_PAY        = 'ir_pay';
-    const IR_SEP        = 'ir_sep';
-    const IR_PEC        = 'ir_pec';
-    const IR_SEP_PAY    = 'ir_sep_pay';
-    const IR_TOP        = 'ir_top';
-    const IR_FANAVACARD = 'ir_fanavacard';
-    const COM_ZARINPAL  = 'com_zarinpal';
+    public const IR_PAY        = 'ir_pay';
+    public const IR_SEP        = 'ir_sep';
+    public const IR_BPM        = 'ir_bpm';
+    public const IR_PEC        = 'ir_pec';
+    public const IR_SEP_PAY    = 'ir_sep_pay';
+    public const IR_TOP        = 'ir_top';
+    public const IR_FANAVACARD = 'ir_fanavacard';
+    public const COM_ZARINPAL  = 'com_zarinpal';
 
-    const GATEWAYS = [
+    public const GATEWAYS = [
         self::IR_PAY,
+        self::IR_BPM,
         self::IR_SEP,
         self::IR_PEC,
         self::IR_SEP_PAY,
@@ -49,9 +52,10 @@ class PaymentGateway
         self::COM_ZARINPAL,
     ];
 
-    const GATEWAY_CLASSES = [
+    public const GATEWAY_CLASSES = [
         self::IR_PAY        => IrPay::class,
         self::IR_SEP        => IrSep::class,
+        self::IR_BPM        => IrBpm::class,
         self::IR_PEC        => IrPec::class,
         self::IR_SEP_PAY    => IrSeppay::class,
         self::IR_TOP        => IrTop::class,
@@ -70,7 +74,7 @@ class PaymentGateway
     {
         $this->gateway = $gateway;
 
-        $this->config = config("payment_gateway.gateways.{$gateway}");
+        $this->config = config("payment-gateway.gateways.{$gateway}");
         if (!$this->config) {
             throw new \Exception("Gateway config is not exists.");
         }

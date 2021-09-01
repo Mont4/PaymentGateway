@@ -29,7 +29,7 @@ class IrSeppay extends PaymentAbstract implements GatewayInterface
         $this->password   = $config['password'];
         $this->gatewayUrl = 'seppay://%s/%s/%d';
         $this->verifyUrl  = 'https://api.seppay.ir/1/verify';
-        $this->redirect   = $config['redirect'];
+        $this->redirect   = $config['callback_url'];
     }
 
     public function setMobile($mobile)

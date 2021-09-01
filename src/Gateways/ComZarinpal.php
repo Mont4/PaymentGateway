@@ -28,7 +28,7 @@ class ComZarinpal extends PaymentAbstract implements GatewayInterface
         $this->requestUrl = $config['request_url'];
         $this->gatewayUrl = $config['gateway_url'];
         $this->verifyUrl  = $config['verify_url'];
-        $this->redirect   = $config['redirect'] . "?gateway=" . PaymentGateway::COM_ZARINPAL;
+        $this->redirect   = $config['callback_url'];
     }
 
     public function request()

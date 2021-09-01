@@ -1,7 +1,11 @@
 {
     "name": "mont4/paymentgateway",
-    "description": ":description",
+    "description": "Iranian laravel payment gateway.",
     "license": "MIT",
+    "keywords": [
+        "payment",
+        "gateway"
+    ],
     "authors": [
         {
             "name": "Mohammad Montazeri",
@@ -10,17 +14,12 @@
         }
     ],
     "homepage": "https://github.com/mont4/paymentgateway",
-    "keywords": ["Laravel", "PaymentGateway"],
     "require": {
-        "illuminate/support": ">=6",
-        "ext-curl": "*",
-        "ext-soap": "*"
+        "php": ">=7.2",
+        "illuminate/support": "^6.0|^7.0|^8.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "~7.0",
-        "mockery/mockery": "^1.1",
-        "orchestra/testbench": "~3.0",
-        "sempro/phpunit-pretty-print": "^1.0"
+        "phpunit/phpunit": "^8.4|^9.0"
     },
     "autoload": {
         "psr-4": {
@@ -32,14 +31,19 @@
             "Mont4\\PaymentGateway\\Tests\\": "tests"
         }
     },
+    "scripts": {
+        "phpunit": "phpunit"
+    },
     "extra": {
         "laravel": {
             "providers": [
                 "Mont4\\PaymentGateway\\PaymentGatewayServiceProvider"
-            ],
-            "aliases": {
-                "PaymentGateway": "Mont4\\PaymentGateway\\Facades\\PaymentGateway"
-            }
+            ]
         }
+    },
+    "config": {
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "optimize-autoloader": true
     }
 }

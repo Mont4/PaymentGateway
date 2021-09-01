@@ -10,6 +10,7 @@ abstract class PaymentAbstract
 {
     const HEADERS = [
         'Content-Type: application/json',
+        'Accept: application/json',
     ];
 
     protected $data = [];
