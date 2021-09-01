@@ -165,6 +165,7 @@ class IrBpm extends PaymentAbstract implements GatewayInterface
             if ($response->return == '0') {
                 return [
                     'success' => true,
+                    'message' => 'پرداخت با موفقیت انجام شد.'
                 ];
             } else {
                 $soapClient->bpReversalRequest($parameters);
@@ -205,8 +206,8 @@ class IrBpm extends PaymentAbstract implements GatewayInterface
             'status_code' => $requestData['ResCode'],
 
             'mid'    => NULL,
-            'token'  => NULL,
-            'amount' => $requestData['FinalAmount'],
+            'token'  => $requestData['RefId'] ?? NULL,
+            'amount' => $requestData['FinalAmount'] ?? NULL,
 
 
             'order_id' => $requestData['SaleOrderId'] ?? NULL,
