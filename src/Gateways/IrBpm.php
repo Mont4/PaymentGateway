@@ -104,33 +104,33 @@ class IrBpm extends PaymentAbstract implements GatewayInterface
         try {
             $soapClient = new \SoapClient($this->requestUrl);
             $response   = $soapClient->bpPayRequest($parameters);
+
+            if (is_numeric($response->return)) {
+                return [
+                    'success' => false,
+                    'message' => self::ERROR_CODE_MESSAGE[$response->return],
+                    'code'    => $response->return,
+                ];
+            }
+
+            $response     = explode(',', $response->return);
+            $responseCode = $response[0];
+
+            if ($responseCode == "0") {
+                return [
+                    'success'     => true,
+                    'method'      => 'get',
+                    'gateway_url' => $this->gatewayUrl,
+                    'token'       => $response[1],
+                    'data'        => [
+                        'Amount'      => $this->amount,
+                        'RefId'       => $response[1],
+                        'RedirectURL' => $this->gatewayUrl,
+                    ],
+                ];
+            }
         } catch (\Exception $ex) {
             app('log')->info($ex);
-        }
-
-        if (is_numeric($response->return)) {
-            return [
-                'success' => false,
-                'message' => self::ERROR_CODE_MESSAGE[$response->return],
-                'code'    => $response->return,
-            ];
-        }
-
-        $response     = explode(',', $response->return);
-        $responseCode = $response[0];
-
-        if ($responseCode == "0") {
-            return [
-                'success'     => true,
-                'method'      => 'get',
-                'gateway_url' => $this->gatewayUrl,
-                'token'       => $response[1],
-                'data'        => [
-                    'Amount'      => $this->amount,
-                    'RefId'       => $response[1],
-                    'RedirectURL' => $this->gatewayUrl,
-                ],
-            ];
         }
 
         return [
