@@ -101,8 +101,12 @@ class IrBpm extends PaymentAbstract implements GatewayInterface
 
         $namespace = 'http://interfaces.core.sw.bps.com/';
 
-        $soapClient = new \SoapClient($this->requestUrl);
-        $response   = $soapClient->bpPayRequest($parameters);
+        try {
+            $soapClient = new \SoapClient($this->requestUrl);
+            $response   = $soapClient->bpPayRequest($parameters);
+        } catch (\Exception $ex) {
+            app('log')->info($ex);
+        }
 
         if (is_numeric($response->return)) {
             return [
@@ -165,7 +169,7 @@ class IrBpm extends PaymentAbstract implements GatewayInterface
             if ($response->return == '0') {
                 return [
                     'success' => true,
-                    'message' => 'پرداخت با موفقیت انجام شد.'
+                    'message' => 'پرداخت با موفقیت انجام شد.',
                 ];
             } else {
                 $soapClient->bpReversalRequest($parameters);
